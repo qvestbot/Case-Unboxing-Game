@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Unboxing Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background: #e74c3c;
+            color: white;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #27ae60;
+        }
+
+        .notification.info {
+            background: #3498db;
+        }
+
+        .notification.warning {
+            background: #f39c12;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button.active {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .balance {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Home Section */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .case-card {
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .case-card:hover {
+            transform: translateY(-10px);
+            border-color: #3498db;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .case-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .case-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .case-price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .case-price.free { color: #2ecc71; }
+        .case-price.premium { color: #f39c12; }
+        .case-price.legendary { color: #e74c3c; }
+
+        .case-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Unbox Section */
+        .unbox-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .roll-container {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 30px 0;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .roll-items {
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transition: transform 4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .roll-item {
+            min-width: 160px;
+            height: 180px;
+            margin: 10px 5px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid;
+            position: relative;
+        }
+
+        .roll-item.common { 
+            border-color: #95a5a6; 
+            background: linear-gradient(145deg, #7f8c8d, #95a5a6); 
+        }
+        .roll-item.uncommon { 
+            border-color: #27ae60; 
+            background: linear-gradient(145deg, #229954, #27ae60); 
+        }
+        .roll-item.rare { 
+            border-color: #3498db; 
+            background: linear-gradient(145deg, #2980b9, #3498db); 
+        }
+        .roll-item.epic { 
+            border-color: #9b59b6; 
+            background: linear-gradient(145deg, #8e44ad, #9b59b6); 
+        }
+        .roll-item.legendary { 
+            border-color: #f39c12; 
+            background: linear-gradient(145deg, #e67e22, #f39c12); 
+        }
+        .roll-item.mythic { 
+            border-color: #e74c3c; 
+            background: linear-gradient(145deg, #c0392b, #e74c3c); 
+        }
+
+        .item-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .item-rarity {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .selector {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 180px;
+            background: linear-gradient(to bottom, transparent, #ff0000, transparent);
+            z-index: 10;
+        }
+
+        .selector::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 12px solid #ff0000;
+        }
+
+        .selector::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #ff0000;
+        }
+
+        .unbox-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .unbox-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .unbox-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-item {
+            display: inline-block;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 15px;
+            border: 2px solid;
+            animation: resultPop 0.6s ease-out;
+        }
+
+        @keyframes resultPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .result-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Inventory Section */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .inventory-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .inventory-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .inventory-item.common { border-color: #95a5a6; }
+        .inventory-item.uncommon { border-color: #27ae60; }
+        .inventory-item.rare { border-color: #3498db; }
+        .inventory-item.epic { border-color: #9b59b6; }
+        .inventory-item.legendary { border-color: #f39c12; }
+        .inventory-item.mythic { border-color: #e74c3c; }
+
+        .quantity-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .sell-btn {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sell-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .empty-inventory {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+            color: #95a5a6;
+        }
+
+        /* Upgrade Section */
+        .upgrade-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .upgrade-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .upgrade-option {
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .upgrade-option.selected {
+            border-color: #3498db;
+        }
+
+        .upgrade-option:hover {
+            transform: translateY(-5px);
+        }
+
+        .upgrade-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .upgrade-chance {
+            background: #2ecc71;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin: 10px 0;
+            display: inline-block;
+        }
+
+        .upgrade-option[data-multiplier="5"] .upgrade-chance {
+            background: #f39c12;
+        }
+
+        .upgrade-option[data-multiplier="10"] .upgrade-chance {
+            background: #e74c3c;
+        }
+
+        .upgrade-info {
+            text-align: center;
+            background: rgba(52, 152, 219, 0.2);
+            border: 2px solid #3498db;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .upgrade-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .upgrade-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upgrade-item.selected {
+            border-color: #3498db !important;
+            background: rgba(52, 152, 219, 0.2);
+        }
+
+        .upgrade-item:hover {
+            transform: scale(1.05);
+        }
+
+        .upgrade-item.common { border-color: #95a5a6; }
+        .upgrade-item.uncommon { border-color: #27ae60; }
+        .upgrade-item.rare { border-color: #3498db; }
+        .upgrade-item.epic { border-color: #9b59b6; }
+        .upgrade-item.legendary { border-color: #f39c12; }
+        .upgrade-item.mythic { border-color: #e74c3c; }
+
+        .upgrade-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 30px auto 0;
+            display: block;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .upgrade-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .upgrade-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #95a5a6;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: white;
+        }
+
+        .contents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .content-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid;
+        }
+
+        .content-item.common { border-color: #95a5a6; }
+        .content-item.uncommon { border-color: #27ae60; }
+        .content-item.rare { border-color: #3498db; }
+        .content-item.epic { border-color: #9b59b6; }
+        .content-item.legendary { border-color: #f39c12; }
+        .content-item.mythic { border-color: #e74c3c; }
+
+        .content-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-chance {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 15px 20px;
+            }
+            
+            .nav-buttons {
+                gap: 8px;
+            }
+            
+            .nav-button {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .cases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-container {
+                padding: 20px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification-container" id="notifications"></div>
+    
+    <div class="top-bar">
+        <div class="logo">CASE UNBOXER</div>
+        <div class="nav-buttons">
+            <div class="balance">💰 $<span id="balance">0.00</span></div>
+            <button class="nav-button active" data-section="home">Home</button>
+            <button class="nav-button" data-section="inventory">Inventory (<span id="inventoryCount">0</span>)</button>
+            <button class="nav-button" data-section="upgrade">Upgrade</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Home Section -->
+        <div class="section active" id="home">
+            <h1 style="text-align: center; margin-bottom: 30px;">Choose Your Case</h1>
+            <div class="cases-grid">
+                <div class="case-card">
+                    <div class="case-icon">📦</div>
+                    <h2 class="case-title">Basic Case</h2>
+                    <div class="case-price free">FREE</div>
+                    <p>Perfect for beginners! Contains common to legendary items.</p>
+                    <div class="case-buttons">
+                        <button class="btn btn-primary" onclick="openCase('basic')">Open Case</button>
+                        <button class="btn btn-secondary" onclick="showContents('basic')">View Contents</button>
+                    </div>
+                </div>
+                
+                <div class="case-card">
+                    <div class="case-icon">🎁</div>
+                    <h2 class="case-title">Premium Case</h2>
+                    <div class="case-price premium">$15.00</div>
+                    <p>Better items! No common drops, higher rare chances.</p>
+                    <div class="case-buttons">
+                        <button class="btn btn-primary" onclick="openCase('premium')">Open Case</button>
+                        <button class="btn btn-secondary" onclick="showContents('premium')">View Contents</button>
+                    </div>
+                </div>
+                
+                <div class="case-card">
+                    <div class="case-icon">💎</div>
+                    <h2 class="case-title">Legendary Case</h2>
+                    <div class="case-price legendary">$50.00</div>
+                    <p>Ultimate case! Guaranteed rare+ with mythic chances!</p>
+                    <div class="case-buttons">
+                        <button class="btn btn-primary" onclick="openCase('legendary')">Open Case</button>
+                        <button class="btn btn-secondary" onclick="showContents('legendary')">View Contents</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unbox Section -->
+        <div class="section" id="unbox">
+            <div class="unbox-container">
+                <h2 id="selectedCaseName">Basic Case</h2>
+                <p id="selectedCasePrice">FREE</p>
+                
+                <div class="roll-container">
+                    <div class="roll-items" id="rollItems"></div>
+                    <div class="selector"></div>
+                </div>
+                
+                <button class="unbox-btn" id="unboxBtn" onclick="startUnbox()">UNBOX CASE</button>
+            </div>
+            
+            <div class="result-section" id="resultSection">
+                <h2>You Got:</h2>
+                <div id="resultItem"></div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="casesOpened">0</div>
+                    <div class="stat-label">Cases Opened</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalValue">$0</div>
+                    <div class="stat-label">Total Value</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="bestItem">None</div>
+                    <div class="stat-label">Best Item</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Section -->
+        <div class="section" id="inventory">
+            <h1 style="margin-bottom: 30px;">Your Inventory</h1>
+            <div class="inventory-grid" id="inventoryGrid">
+                <div class="empty-inventory">
+                    <h3>Your inventory is empty!</h3>
+                    <p>Open some cases to get items.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upgrade Section -->
+        <div class="section" id="upgrade">
+            <div class="upgrade-container">
+                <h1 style="text-align: center; margin-bottom: 30px;">Item Upgrade Station</h1>
+                <p style="text-align: center; margin-bottom: 30px; opacity: 0.8;">
+                    Risk your items for massive rewards! Choose a multiplier and test your luck.
+                </p>
+                
+                <div class="upgrade-options">
+                    <div class="upgrade-option selected" data-multiplier="2" onclick="selectMultiplier(2)">
+                        <div class="upgrade-icon">🎯</div>
+                        <h3>2x Upgrade</h3>
+                        <div class="upgrade-chance">50% Success</div>
+                        <p>Double your item's value</p>
+                    </div>
+                    <div class="upgrade-option" data-multiplier="5" onclick="selectMultiplier(5)">
+                        <div class="upgrade-icon">🎰</div>
+                        <h3>5x Upgrade</h3>
+                        <div class="upgrade-chance">20% Success</div>
+                        <p>5x value, risky odds</p>
+                    </div>
+                    <div class="upgrade-option" data-multiplier="10" onclick="selectMultiplier(10)">
+                        <div class="upgrade-icon">💥</div>
+                        <h3>10x Upgrade</h3>
+                        <div class="upgrade-chance">8% Success</div>
+                        <p>10x value, very risky!</p>
+                    </div>
+                </div>
+                
+                <div class="upgrade-info" id="upgradeInfo">
+                    <h3>Selected: <span id="selectedMultiplier">2x</span> Upgrade</h3>
+                    <p>Success Rate: <span id="selectedChance">50%</span></p>
+                    <p style="color: #e74c3c; margin-top: 10px;">⚠️ WARNING: Item will be destroyed if upgrade fails!</p>
+                </div>
+                
+                <div class="upgrade-items" id="upgradeItems">
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #95a5a6;">
+                        <h3>No items available for upgrade</h3>
+                        <p>Get some items from cases first!</p>
+                    </div>
+                </div>
+                
+                <button class="upgrade-btn" id="upgradeBtn" onclick="attemptUpgrade()" disabled>
+                    Select an Item to Upgrade
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Case Contents</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="contents-grid" id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Game Data
+        const items = {
+            basic: [
+                { name: "Wooden Sword", rarity: "common", icon: "🗡", value: 0.25 },
+                { name: "Iron Helmet", rarity: "common", icon: "🪖", value: 0.30 },
+                { name: "Leather Boots", rarity: "common", icon: "👢", value: 0.20 },
+                { name: "Rusty Dagger", rarity: "common", icon: "🔪", value: 0.18 },
+                { name: "Cloth Armor", rarity: "common", icon: "👕", value: 0.35 },
+                { name: "Basic Potion", rarity: "common", icon: "🧪", value: 0.40 },
+                { name: "Steel Shield", rarity: "uncommon", icon: "🛡", value: 1.50 },
+                { name: "Magic Potion", rarity: "uncommon", icon: "⚗", value: 2.00 },
+                { name: "Silver Coin", rarity: "uncommon", icon: "🪙", value: 1.75 },
+                { name: "Crystal Gem", rarity: "uncommon", icon: "💎", value: 1.85 },
+                { name: "Ruby Ring", rarity: "rare", icon: "💍", value: 12.00 },
+                { name: "Dragon Scale", rarity: "epic", icon: "🐲", value: 40.00 },
+                { name: "Golden Crown", rarity: "legendary", icon: "👑", value: 150.00 }
+            ],
+            premium: [
+                { name: "Silver Blade", rarity: "uncommon", icon: "⚔", value: 3.50 },
+                { name: "Iron Boots", rarity: "uncommon", icon: "👢", value: 3.00 },
+                { name: "Magic Scroll", rarity: "uncommon", icon: "📜", value: 4.20 },
+                { name: "Emerald Gem", rarity: "uncommon", icon: "🟢", value: 3.80 },
+                { name: "Steel Armor", rarity: "uncommon", icon: "🛡", value: 3.20 },
+                { name: "Mithril Sword", rarity: "rare", icon: "⚔", value: 18.00 },
+                { name: "Phoenix Feather", rarity: "rare", icon: "🪶", value: 22.00 },
+                { name: "Sapphire Ring", rarity: "rare", icon: "🔵", value: 16.50 },
+                { name: "Ancient Coin", rarity: "rare", icon: "🪙", value: 20.00 },
+                { name: "Crystal Orb", rarity: "epic", icon: "🔮", value: 75.00 },
+                { name: "Demon Horn", rarity: "epic", icon: "👹", value: 85.00 },
+                { name: "Angel Wings", rarity: "legendary", icon: "👼", value: 300.00 },
+                { name: "Excalibur", rarity: "mythic", icon: "⚡", value: 1200.00 }
+            ],
+            legendary: [
+                { name: "Enchanted Blade", rarity: "rare", icon: "⚔", value: 28.00 },
+                { name: "Diamond Ring", rarity: "rare", icon: "💍", value: 35.00 },
+                { name: "Ancient Rune", rarity: "rare", icon: "🗿", value: 25.00 },
+                { name: "Mystic Scroll", rarity: "rare", icon: "📜", value: 32.00 },
+                { name: "Dragon Armor", rarity: "rare", icon: "🛡", value: 38.00 },
+                { name: "Titan Gauntlets", rarity: "epic", icon: "✊", value: 120.00 },
+                { name: "Void Cloak", rarity: "epic", icon: "🌑", value: 140.00 },
+                { name: "Storm Hammer", rarity: "epic", icon: "🔨", value: 160.00 },
+                { name: "Fire Sword", rarity: "epic", icon: "🔥", value: 130.00 },
+                { name: "God's Hammer", rarity: "legendary", icon: "⚡", value: 450.00 },
+                { name: "Universe Staff", rarity: "legendary", icon: "🪄", value: 520.00 },
+                { name: "Reality Stone", rarity: "mythic", icon: "🔴", value: 2500.00 },
+                { name: "Creator's Eye", rarity: "mythic", icon: "👁", value: 3500.00 }
+            ]
+        };
+
+        const rarityWeights = {
+            basic: { common: 70, uncommon: 20, rare: 8, epic: 1.8, legendary: 0.2 },
+            premium: { uncommon: 55, rare: 30, epic: 12, legendary: 2.8, mythic: 0.2 },
+            legendary: { rare: 60, epic: 28, legendary: 10, mythic: 2 }
+        };
+
+        const caseInfo = {
+            basic: { name: "Basic Case", price: 0 },
+            premium: { name: "Premium Case", price: 15.00 },
+            legendary: { name: "Legendary Case", price: 50.00 }
+        };
+
+        const upgradeRates = { 2: 50, 5: 20, 10: 8 };
+
+        // Game State
+        let gameState = {
+            balance: 0.00,
+            inventory: {},
+            currentCase: 'basic',
+            isRolling: false,
+            stats: { casesOpened: 0, totalValue: 0, bestItem: null },
+            selectedMultiplier: 2,
+            selectedUpgradeItem: null
+        };
+
+        // Utility Functions
+        function showNotification(message, type = 'error', duration = 4000) {
+            const container = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            container.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (container.contains(notification)) {
+                        container.removeChild(notification);
+                    }
+                }, 300);
+            }, duration);
+        }
+
+        function updateUI() {
+            document.getElementById('balance').textContent = gameState.balance.toFixed(2);
+            document.getElementById('casesOpened').textContent = gameState.stats.casesOpened;
+            document.getElementById('totalValue').textContent = `${gameState.stats.totalValue.toFixed(2)}`;
+            document.getElementById('bestItem').textContent = gameState.stats.bestItem ? gameState.stats.bestItem.name : 'None';
+            
+            const totalItems = Object.values(gameState.inventory).reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('inventoryCount').textContent = totalItems;
+        }
+
+        function getRandomItem(caseType) {
+            const caseItems = items[caseType];
+            const weights = rarityWeights[caseType];
+            
+            const totalWeight = Object.values(weights).reduce((sum, weight) => sum + weight, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (const [rarity, weight] of Object.entries(weights)) {
+                random -= weight;
+                if (random <= 0) {
+                    const rarityItems = caseItems.filter(item => item.rarity === rarity);
+                    return rarityItems[Math.floor(Math.random() * rarityItems.length)];
+                }
+            }
+            
+            return caseItems[Math.floor(Math.random() * caseItems.length)];
+        }
+
+        // Navigation
+        function switchSection(sectionName) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+            
+            const targetSection = document.getElementById(sectionName);
+            const targetButton = document.querySelector(`[data-section="${sectionName}"]`);
+            
+            if (targetSection) targetSection.classList.add('active');
+            if (targetButton) targetButton.classList.add('active');
+            
+            if (sectionName === 'inventory') updateInventoryDisplay();
+            if (sectionName === 'upgrade') updateUpgradeDisplay();
+        }
+
+        function initNavigation() {
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.addEventListener('click', () => switchSection(button.dataset.section));
+            });
+        }
+
+        // Case Functions
+        function openCase(caseType) {
+            const price = caseInfo[caseType].price;
+            
+            if (price > gameState.balance) {
+                showNotification(`Insufficient funds! Need ${price.toFixed(2)}, have ${gameState.balance.toFixed(2)}`, 'error');
+                return;
+            }
+            
+            gameState.currentCase = caseType;
+            document.getElementById('selectedCaseName').textContent = caseInfo[caseType].name;
+            document.getElementById('selectedCasePrice').textContent = price === 0 ? 'FREE' : `${price.toFixed(2)}`;
+            
+            // Show preview items
+            generatePreviewItems();
+            
+            switchSection('unbox');
+            showNotification(`Ready to open ${caseInfo[caseType].name}!`, 'success', 2000);
+        }
+
+        function generatePreviewItems() {
+            const container = document.getElementById('rollItems');
+            container.innerHTML = '';
+            container.style.transition = 'none';
+            container.style.transform = 'translateX(0px)';
+            
+            for (let i = 0; i < 15; i++) {
+                const item = getRandomItem(gameState.currentCase);
+                const itemElement = document.createElement('div');
+                itemElement.className = `roll-item ${item.rarity}`;
+                itemElement.innerHTML = `
+                    <div class="item-icon">${item.icon}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-rarity">${item.rarity}</div>
+                `;
+                container.appendChild(itemElement);
+            }
+        }
+
+        function startUnbox() {
+            if (gameState.isRolling) {
+                showNotification('Please wait for the current roll to finish!', 'warning');
+                return;
+            }
+            
+            const price = caseInfo[gameState.currentCase].price;
+            
+            if (price > gameState.balance) {
+                showNotification(`Insufficient funds! Need ${price.toFixed(2)}`, 'error');
+                return;
+            }
+            
+            gameState.isRolling = true;
+            gameState.balance -= price;
+            updateUI();
+            
+            const button = document.getElementById('unboxBtn');
+            button.disabled = true;
+            button.textContent = 'ROLLING...';
+            
+            document.getElementById('resultSection').style.display = 'none';
+            
+            // Create fresh roll items
+            const container = document.getElementById('rollItems');
+            container.innerHTML = '';
+            container.style.transition = 'none';
+            container.style.transform = 'translateX(0px)';
+            
+            const numItems = 50;
+            const winningIndex = 40 + Math.floor(Math.random() * 8);
+            let winnerData = null;
+            
+            // Generate items
+            for (let i = 0; i < numItems; i++) {
+                const item = getRandomItem(gameState.currentCase);
+                const itemElement = document.createElement('div');
+                itemElement.className = `roll-item ${item.rarity}`;
+                itemElement.innerHTML = `
+                    <div class="item-icon">${item.icon}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-rarity">${item.rarity}</div>
+                `;
+                
+                if (i === winningIndex) {
+                    winnerData = item;
+                    itemElement.id = 'winner-item';
+                }
+                
+                container.appendChild(itemElement);
+            }
+            
+            // Start animation after DOM update
+            setTimeout(() => {
+                const winner = document.getElementById('winner-item');
+                
+                if (!winner) {
+                    gameState.isRolling = false;
+                    button.disabled = false;
+                    button.textContent = 'UNBOX CASE';
+                    showNotification('Error during roll, please try again!', 'error');
+                    return;
+                }
+                
+                const winnerOffset = winner.offsetLeft;
+                const containerWidth = container.parentElement.offsetWidth;
+                const finalPosition = -(winnerOffset - containerWidth/2 + winner.offsetWidth/2);
+                
+                container.style.transition = 'transform 4s cubic-bezier(0.23, 1, 0.32, 1)';
+                container.style.transform = `translateX(${finalPosition}px)`;
+                
+                setTimeout(() => {
+                    addToInventory(winnerData);
+                    showResult(winnerData);
+                    updateStats(winnerData);
+                    
+                    const rarityMessages = {
+                        common: `Got a ${winnerData.rarity} item: ${winnerData.name}`,
+                        uncommon: `Nice! Got ${winnerData.name}`,
+                        rare: `Great! Got ${winnerData.name}`,
+                        epic: `Amazing! Got ${winnerData.name}`,
+                        legendary: `INCREDIBLE! Got ${winnerData.name}`,
+                        mythic: `LEGENDARY DROP! Got ${winnerData.name}`
+                    };
+                    
+                    showNotification(rarityMessages[winnerData.rarity], winnerData.rarity === 'common' ? 'info' : 'success', 4000);
+                    
+                    gameState.isRolling = false;
+                    button.disabled = false;
+                    button.textContent = 'UNBOX CASE';
+                    
+                    // Clean up
+                    winner.removeAttribute('id');
+                }, 4200);
+            }, 300);
+        }
+
+        function addToInventory(item) {
+            const key = item.name;
+            if (gameState.inventory[key]) {
+                gameState.inventory[key].quantity++;
+            } else {
+                gameState.inventory[key] = { ...item, quantity: 1 };
+            }
+            updateUI();
+        }
+
+        function showResult(item) {
+            const resultSection = document.getElementById('resultSection');
+            const resultItem = document.getElementById('resultItem');
+            
+            resultItem.innerHTML = `
+                <div class="result-item ${item.rarity}">
+                    <div class="result-icon">${item.icon}</div>
+                    <div class="result-name">${item.name}</div>
+                    <div class="result-rarity">${item.rarity}</div>
+                    <div class="result-value">${item.value.toFixed(2)}</div>
+                </div>
+            `;
+            
+            resultSection.style.display = 'block';
+        }
+
+        function updateStats(item) {
+            gameState.stats.casesOpened++;
+            gameState.stats.totalValue += item.value;
+            
+            if (!gameState.stats.bestItem || item.value > gameState.stats.bestItem.value) {
+                gameState.stats.bestItem = item;
+            }
+            
+            updateUI();
+        }
+
+        // Inventory Functions
+        function updateInventoryDisplay() {
+            const grid = document.getElementById('inventoryGrid');
+            const items = Object.values(gameState.inventory).filter(item => item.quantity > 0);
+            
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-inventory">
+                        <h3>Your inventory is empty!</h3>
+                        <p>Open some cases to get items.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            items.sort((a, b) => {
+                const rarityOrder = { mythic: 6, legendary: 5, epic: 4, rare: 3, uncommon: 2, common: 1 };
+                if (rarityOrder[b.rarity] !== rarityOrder[a.rarity]) {
+                    return rarityOrder[b.rarity] - rarityOrder[a.rarity];
+                }
+                return b.value - a.value;
+            });
+            
+            grid.innerHTML = items.map(item => `
+                <div class="inventory-item ${item.rarity}">
+                    ${item.quantity > 1 ? `<div class="quantity-badge">${item.quantity}</div>` : ''}
+                    <div class="item-icon">${item.icon}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-rarity">${item.rarity}</div>
+                    <div style="margin: 10px 0; font-weight: bold;">${item.value.toFixed(2)}</div>
+                    <button class="sell-btn" onclick="sellItem('${item.name.replace(/'/g, "\\'")}')">Sell One</button>
+                </div>
+            `).join('');
+        }
+
+        function sellItem(itemName) {
+            const item = gameState.inventory[itemName];
+            if (!item || item.quantity <= 0) {
+                showNotification('Item not found!', 'error');
+                return;
+            }
+            
+            gameState.balance += item.value;
+            item.quantity--;
+            
+            if (item.quantity === 0) {
+                delete gameState.inventory[itemName];
+            }
+            
+            showNotification(`Sold ${itemName} for ${item.value.toFixed(2)}`, 'success', 2000);
+            updateUI();
+            updateInventoryDisplay();
+            updateUpgradeDisplay();
+        }
+
+        // Upgrade Functions
+        function selectMultiplier(multiplier) {
+            gameState.selectedMultiplier = multiplier;
+            gameState.selectedUpgradeItem = null;
+            
+            document.querySelectorAll('.upgrade-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-multiplier="${multiplier}"]`).classList.add('selected');
+            
+            document.getElementById('selectedMultiplier').textContent = `${multiplier}x`;
+            document.getElementById('selectedChance').textContent = `${upgradeRates[multiplier]}%`;
+            
+            updateUpgradeDisplay();
+        }
+
+        function updateUpgradeDisplay() {
+            const container = document.getElementById('upgradeItems');
+            const items = Object.values(gameState.inventory).filter(item => item.quantity > 0);
+            
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #95a5a6;">
+                        <h3>No items available for upgrade</h3>
+                        <p>Get some items from cases first!</p>
+                    </div>
+                `;
+                document.getElementById('upgradeBtn').disabled = true;
+                document.getElementById('upgradeBtn').textContent = 'No Items Available';
+                return;
+            }
+            
+            items.sort((a, b) => b.value - a.value);
+            
+            container.innerHTML = items.map(item => `
+                <div class="upgrade-item ${item.rarity} ${gameState.selectedUpgradeItem === item.name ? 'selected' : ''}" 
+                     onclick="selectUpgradeItem('${item.name.replace(/'/g, "\\'")}')">
+                    <div class="item-icon">${item.icon}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-rarity">${item.rarity}</div>
+                    <div style="margin: 8px 0; font-weight: bold;">${item.value.toFixed(2)}</div>
+                    <div style="font-size: 0.9rem; color: #3498db;">→ ${(item.value * gameState.selectedMultiplier).toFixed(2)}</div>
+                    ${item.quantity > 1 ? `<div style="margin-top: 5px; font-size: 0.8rem;">Qty: ${item.quantity}</div>` : ''}
+                </div>
+            `).join('');
+            
+            const button = document.getElementById('upgradeBtn');
+            if (gameState.selectedUpgradeItem) {
+                button.disabled = false;
+                button.textContent = `Upgrade ${gameState.selectedUpgradeItem}`;
+            } else {
+                button.disabled = true;
+                button.textContent = 'Select an Item to Upgrade';
+            }
+        }
+
+        function selectUpgradeItem(itemName) {
+            gameState.selectedUpgradeItem = itemName;
+            updateUpgradeDisplay();
+            showNotification(`Selected ${itemName} for ${gameState.selectedMultiplier}x upgrade`, 'info', 2000);
+        }
+
+        function attemptUpgrade() {
+            if (!gameState.selectedUpgradeItem) {
+                showNotification('Please select an item to upgrade!', 'error');
+                return;
+            }
+            
+            const item = gameState.inventory[gameState.selectedUpgradeItem];
+            if (!item || item.quantity <= 0) {
+                showNotification('Item not found in inventory!', 'error');
+                return;
+            }
+            
+            const successRate = upgradeRates[gameState.selectedMultiplier];
+            const isSuccess = Math.random() * 100 < successRate;
+            
+            // Remove one copy of the item
+            item.quantity--;
+            if (item.quantity === 0) {
+                delete gameState.inventory[gameState.selectedUpgradeItem];
+            }
+            
+            if (isSuccess) {
+                const upgradedItem = {
+                    ...item,
+                    name: `${item.name} +${gameState.selectedMultiplier}`,
+                    value: item.value * gameState.selectedMultiplier,
+                    quantity: 1
+                };
+                
+                const upgradedKey = upgradedItem.name;
+                if (gameState.inventory[upgradedKey]) {
+                    gameState.inventory[upgradedKey].quantity++;
+                } else {
+                    gameState.inventory[upgradedKey] = upgradedItem;
+                }
+                
+                showNotification(`SUCCESS! Upgraded to ${upgradedItem.name} worth ${upgradedItem.value.toFixed(2)}!`, 'success', 5000);
+            } else {
+                showNotification(`FAILED! ${gameState.selectedUpgradeItem} was destroyed...`, 'error', 4000);
+            }
+            
+            gameState.selectedUpgradeItem = null;
+            updateUI();
+            updateUpgradeDisplay();
+        }
+
+        // Modal Functions
+        function showContents(caseType) {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+            
+            title.textContent = `${caseInfo[caseType].name} Contents`;
+            
+            const caseItems = items[caseType];
+            const weights = rarityWeights[caseType];
+            const totalWeight = Object.values(weights).reduce((sum, weight) => sum + weight, 0);
+            
+            const itemsWithChances = caseItems.map(item => {
+                const rarityChance = weights[item.rarity] || 0;
+                const itemsInRarity = caseItems.filter(i => i.rarity === item.rarity).length;
+                const individualChance = (rarityChance / itemsInRarity / totalWeight * 100).toFixed(2);
+                return { ...item, chance: individualChance };
+            });
+            
+            itemsWithChances.sort((a, b) => {
+                const rarityOrder = { mythic: 6, legendary: 5, epic: 4, rare: 3, uncommon: 2, common: 1 };
+                if (rarityOrder[b.rarity] !== rarityOrder[a.rarity]) {
+                    return rarityOrder[b.rarity] - rarityOrder[a.rarity];
+                }
+                return b.value - a.value;
+            });
+            
+            content.innerHTML = itemsWithChances.map(item => `
+                <div class="content-item ${item.rarity}">
+                    <div class="content-icon">${item.icon}</div>
+                    <div class="content-name">${item.name}</div>
+                    <div class="content-rarity">${item.rarity}</div>
+                    <div style="font-weight: bold; margin: 8px 0;">${item.value.toFixed(2)}</div>
+                    <div class="content-chance">${item.chance}%</div>
+                </div>
+            `).join('');
+            
+            modal.classList.add('active');
+            showNotification(`Viewing ${caseInfo[caseType].name} contents`, 'info', 2000);
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') closeModal();
+        });
+
+        // Initialize game
+        function init() {
+            initNavigation();
+            updateUI();
+            generatePreviewItems();
+            
+            setTimeout(() => {
+                showNotification('Welcome to Case Unboxer! Start with the free Basic Case.', 'info', 5000);
+            }, 1000);
+        }
+
+        // Start the game when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
