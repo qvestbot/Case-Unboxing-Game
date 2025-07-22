@@ -53,6 +53,146 @@
             background: #f39c12;
         }
 
+        /* Auth System Styles */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .auth-container {
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .auth-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .auth-subtitle {
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .auth-tab.active {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ecf0f1;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .auth-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .auth-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-links {
+            margin-top: 20px;
+        }
+
+        .auth-link {
+            color: #3498db;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .auth-link:hover {
+            color: #2980b9;
+        }
+
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -75,17 +215,19 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .nav-button {
             background: linear-gradient(45deg, #3498db, #2980b9);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 12px 20px;
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
         .nav-button.active {
@@ -103,6 +245,34 @@
             font-weight: bold;
         }
 
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .username-display {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #e67e22, #d35400);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+        }
+
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -117,7 +287,7 @@
             display: block;
         }
 
-        /* Home Section */
+        /* Cases Section */
         .cases-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -370,6 +540,33 @@
             margin-top: 10px;
         }
 
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
         /* Inventory Section */
         .inventory-grid {
             display: grid;
@@ -558,6 +755,212 @@
             transform: translateY(-3px);
         }
 
+        /* Leaderboard Section */
+        .leaderboard-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .leaderboard-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .leaderboard-tab.active {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            transform: translateY(-2px);
+        }
+
+        .leaderboard-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-content {
+            display: none;
+        }
+
+        .leaderboard-content.active {
+            display: block;
+        }
+
+        .leaderboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .leaderboard-header h2 {
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .leaderboard-header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        .leaderboard-list {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .leaderboard-loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #95a5a6;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .leaderboard-item:hover {
+            transform: translateY(-2px);
+            border-color: #3498db;
+        }
+
+        .leaderboard-item.current-user {
+            border-color: #f39c12;
+            background: linear-gradient(145deg, #d35400, #e67e22);
+        }
+
+        .leaderboard-rank {
+            font-size: 1.5rem;
+            font-weight: bold;
+            width: 60px;
+            text-align: center;
+            color: #ecf0f1;
+        }
+
+        .leaderboard-rank.top1 { color: #f1c40f; text-shadow: 0 0 10px #f1c40f; }
+        .leaderboard-rank.top2 { color: #95a5a6; text-shadow: 0 0 10px #95a5a6; }
+        .leaderboard-rank.top3 { color: #cd7f32; text-shadow: 0 0 10px #cd7f32; }
+
+        .leaderboard-user {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .leaderboard-username {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .leaderboard-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .leaderboard-stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .leaderboard-main-stat {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2ecc71;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .leaderboard-best-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid;
+            max-width: 200px;
+        }
+
+        .leaderboard-best-item.common { border-color: #95a5a6; }
+        .leaderboard-best-item.uncommon { border-color: #27ae60; }
+        .leaderboard-best-item.rare { border-color: #3498db; }
+        .leaderboard-best-item.epic { border-color: #9b59b6; }
+        .leaderboard-best-item.legendary { border-color: #f39c12; }
+        .leaderboard-best-item.mythic { border-color: #e74c3c; }
+
+        .leaderboard-item-icon {
+            font-size: 1.2rem;
+        }
+
+        .leaderboard-item-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .leaderboard-item-name {
+            font-size: 0.85rem;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .leaderboard-item-value {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .empty-leaderboard {
+            text-align: center;
+            padding: 60px;
+            color: #95a5a6;
+        }
+
+        .refresh-leaderboard {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-leaderboard:hover {
+            transform: translateY(-2px);
+        }
+
         /* Modal */
         .modal {
             display: none;
@@ -644,44 +1047,21 @@
             display: inline-block;
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .stat-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            opacity: 0.8;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
         @media (max-width: 768px) {
             .top-bar {
                 padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
             }
             
             .nav-buttons {
                 gap: 8px;
+                justify-content: center;
             }
             
             .nav-button {
                 padding: 8px 16px;
-                font-size: 0.9rem;
+                font-size: 0.8rem;
             }
             
             .cases-grid {
@@ -691,19 +1071,95 @@
             .main-container {
                 padding: 20px 10px;
             }
+
+            .user-info {
+                flex-direction: row;
+                gap: 8px;
+            }
+
+            .username-display, .logout-btn {
+                font-size: 0.9rem;
+                padding: 6px 12px;
+            }
+
+            .leaderboard-tabs {
+                max-width: 100%;
+            }
+
+            .leaderboard-tab {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+
+            .leaderboard-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="notification-container" id="notifications"></div>
     
+    <!-- Authentication Overlay -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-container">
+            <h1 class="auth-title">CASE UNBOXER</h1>
+            <p class="auth-subtitle">Create an account or login to save your progress!</p>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="loginTab" onclick="switchAuthTab('login')">Login</button>
+                <button class="auth-tab" id="registerTab" onclick="switchAuthTab('register')">Register</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="auth-form active" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="loginUsername" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="button" class="auth-button" onclick="handleLogin()">Login</button>
+            </div>
+            
+            <!-- Register Form -->
+            <div class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="registerUsername" placeholder="Choose a username" required minlength="3">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="registerPassword" placeholder="Choose a password" required minlength="4">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-input" id="registerConfirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <button type="button" class="auth-button" onclick="handleRegister()">Create Account</button>
+            </div>
+            
+            <div class="auth-links">
+                <p>Demo Account: <span class="auth-link" onclick="quickLogin()">Login as Guest</span></p>
+            </div>
+        </div>
+    </div>
+    
     <div class="top-bar">
         <div class="logo">CASE UNBOXER</div>
         <div class="nav-buttons">
             <div class="balance">💰 $<span id="balance">0.00</span></div>
+            <div class="user-info">
+                <div class="username-display">👤 <span id="currentUsername">Guest</span></div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
             <button class="nav-button active" data-section="home">Home</button>
             <button class="nav-button" data-section="inventory">Inventory (<span id="inventoryCount">0</span>)</button>
             <button class="nav-button" data-section="upgrade">Upgrade</button>
+            <button class="nav-button" data-section="leaderboard">Leaderboard</button>
         </div>
     </div>
 
@@ -840,6 +1296,38 @@
                 </button>
             </div>
         </div>
+
+        <!-- Leaderboard Section -->
+        <div class="section" id="leaderboard">
+            <h1 style="text-align: center; margin-bottom: 30px;">🏆 Leaderboards</h1>
+            
+            <div class="leaderboard-tabs">
+                <button class="leaderboard-tab active" id="richestTab" onclick="switchLeaderboardTab('richest')">💰 Richest Players</button>
+                <button class="leaderboard-tab" id="casesTab" onclick="switchLeaderboardTab('cases')">📦 Most Cases Opened</button>
+            </div>
+            
+            <!-- Richest Players Leaderboard -->
+            <div class="leaderboard-content active" id="richestLeaderboard">
+                <div class="leaderboard-header">
+                    <h2>💰 Top Players by Balance</h2>
+                    <p>The wealthiest case unboxers in the game!</p>
+                </div>
+                <div class="leaderboard-list" id="richestList">
+                    <div class="leaderboard-loading">Loading leaderboard...</div>
+                </div>
+            </div>
+            
+            <!-- Most Cases Opened Leaderboard -->
+            <div class="leaderboard-content" id="casesLeaderboard">
+                <div class="leaderboard-header">
+                    <h2>📦 Top Players by Cases Opened</h2>
+                    <p>The most dedicated case openers!</p>
+                </div>
+                <div class="leaderboard-list" id="casesList">
+                    <div class="leaderboard-loading">Loading leaderboard...</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal -->
@@ -854,6 +1342,29 @@
     </div>
 
     <script>
+        // Global storage initialization
+        window.gameData = window.gameData || {
+            accounts: {
+                'guest': { password: 'guest_hash_12345', created: new Date().toISOString() }
+            },
+            userData: {
+                'guest': {
+                    username: 'guest',
+                    gameState: {
+                        balance: 50.00,
+                        inventory: {},
+                        currentCase: 'basic',
+                        isRolling: false,
+                        stats: { casesOpened: 0, totalValue: 0, bestItem: null },
+                        selectedMultiplier: 2,
+                        selectedUpgradeItem: null
+                    },
+                    lastSaved: new Date().toISOString()
+                }
+            },
+            leaderboardData: {}
+        };
+
         // Game Data
         const items = {
             basic: [
@@ -928,6 +1439,404 @@
             selectedUpgradeItem: null
         };
 
+        // Authentication State
+        let currentUser = null;
+        let isAuthenticated = false;
+
+        // Account Management Functions
+        function hashPassword(password) {
+            let hash = 0;
+            if (password.length === 0) return hash.toString();
+            for (let i = 0; i < password.length; i++) {
+                const char = password.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return `hash_${Math.abs(hash)}_${password.length}`;
+        }
+
+        function saveUserData() {
+            if (!currentUser) return;
+            
+            const userData = {
+                username: currentUser,
+                gameState: { ...gameState },
+                lastSaved: new Date().toISOString()
+            };
+            
+            if (!window.gameData) {
+                window.gameData = { accounts: {}, userData: {}, leaderboardData: {} };
+            }
+            if (!window.gameData.userData) {
+                window.gameData.userData = {};
+            }
+            
+            window.gameData.userData[currentUser] = userData;
+        }
+
+        function loadUserData(username) {
+            if (!window.gameData || !window.gameData.userData) {
+                return null;
+            }
+            
+            return window.gameData.userData[username] || null;
+        }
+
+        function getStoredAccounts() {
+            if (!window.gameData) {
+                window.gameData = { accounts: {}, userData: {}, leaderboardData: {} };
+            }
+            if (!window.gameData.accounts) {
+                window.gameData.accounts = {};
+            }
+            
+            if (!window.gameData.accounts['guest']) {
+                window.gameData.accounts['guest'] = {
+                    password: 'guest_hash_12345',
+                    created: new Date().toISOString()
+                };
+            }
+            
+            return window.gameData.accounts;
+        }
+
+        function saveAccount(username, password) {
+            if (!window.gameData) {
+                window.gameData = { accounts: {}, userData: {}, leaderboardData: {} };
+            }
+            if (!window.gameData.accounts) {
+                window.gameData.accounts = {};
+            }
+            
+            const hashedPassword = hashPassword(password);
+            window.gameData.accounts[username] = {
+                password: hashedPassword,
+                created: new Date().toISOString()
+            };
+        }
+
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            document.getElementById(`${tab}Tab`).classList.add('active');
+            document.getElementById(`${tab}Form`).classList.add('active');
+        }
+
+        function handleLogin(event) {
+            if (event) event.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                showNotification('Please fill in all fields!', 'error');
+                return false;
+            }
+            
+            const accounts = getStoredAccounts();
+            const account = accounts[username];
+            
+            if (!account) {
+                showNotification('Account not found! Please register first.', 'error');
+                return false;
+            }
+            
+            const inputHash = username === 'guest' ? 'guest_hash_12345' : hashPassword(password);
+            
+            if (account.password !== inputHash) {
+                showNotification('Incorrect password!', 'error');
+                return false;
+            }
+            
+            loginUser(username);
+            return false;
+        }
+
+        function handleRegister(event) {
+            if (event) event.preventDefault();
+            
+            const username = document.getElementById('registerUsername').value.trim().toLowerCase();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (!username || !password || !confirmPassword) {
+                showNotification('Please fill in all fields!', 'error');
+                return false;
+            }
+            
+            if (username.length < 3) {
+                showNotification('Username must be at least 3 characters long!', 'error');
+                return false;
+            }
+            
+            if (password.length < 4) {
+                showNotification('Password must be at least 4 characters long!', 'error');
+                return false;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match!', 'error');
+                return false;
+            }
+            
+            const accounts = getStoredAccounts();
+            if (accounts[username]) {
+                showNotification('Username already exists! Please choose another.', 'error');
+                return false;
+            }
+            
+            saveAccount(username, password);
+            showNotification('Account created successfully!', 'success');
+            
+            document.getElementById('registerUsername').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+            
+            switchAuthTab('login');
+            document.getElementById('loginUsername').value = username;
+            document.getElementById('loginPassword').value = password;
+            
+            setTimeout(() => {
+                loginUser(username);
+            }, 1000);
+            
+            return false;
+        }
+
+        function quickLogin() {
+            document.getElementById('loginUsername').value = 'guest';
+            document.getElementById('loginPassword').value = 'guest';
+            switchAuthTab('login');
+            setTimeout(() => {
+                loginUser('guest');
+            }, 500);
+        }
+
+        function loginUser(username) {
+            currentUser = username;
+            isAuthenticated = true;
+            
+            const userData = loadUserData(username);
+            if (userData && userData.gameState) {
+                gameState = { ...userData.gameState };
+                showNotification(`Welcome back, ${username}! Progress loaded.`, 'success', 3000);
+            } else {
+                if (username === 'guest') {
+                    gameState.balance = 50.00;
+                } else {
+                    gameState.balance = 10.00;
+                }
+                showNotification(`Welcome, ${username}! Here's ${gameState.balance.toFixed(2)} to get started!`, 'success', 4000);
+            }
+            
+            document.getElementById('currentUsername').textContent = username;
+            document.getElementById('authOverlay').style.display = 'none';
+            updateUI();
+            
+            document.querySelectorAll('.form-input').forEach(input => input.value = '');
+            
+            setTimeout(() => {
+                saveUserData();
+                updateLeaderboardStats();
+            }, 500);
+        }
+
+        function logout() {
+            if (currentUser) {
+                saveUserData();
+                showNotification(`Goodbye, ${currentUser}! Progress saved.`, 'info', 3000);
+            }
+            
+            currentUser = null;
+            isAuthenticated = false;
+            
+            gameState = {
+                balance: 0.00,
+                inventory: {},
+                currentCase: 'basic',
+                isRolling: false,
+                stats: { casesOpened: 0, totalValue: 0, bestItem: null },
+                selectedMultiplier: 2,
+                selectedUpgradeItem: null
+            };
+            
+            document.getElementById('authOverlay').style.display = 'flex';
+            document.querySelectorAll('.form-input').forEach(input => input.value = '');
+            switchAuthTab('login');
+            
+            updateUI();
+        }
+
+        // Auto-save and leaderboard functions
+        function autoSave() {
+            if (isAuthenticated && currentUser) {
+                saveUserData();
+            }
+        }
+
+        function updateLeaderboardStats() {
+            if (!isAuthenticated || !currentUser) return;
+            
+            if (!window.gameData.leaderboardData) {
+                window.gameData.leaderboardData = {};
+            }
+            
+            window.gameData.leaderboardData[currentUser] = {
+                username: currentUser,
+                balance: gameState.balance,
+                casesOpened: gameState.stats.casesOpened,
+                totalValue: gameState.stats.totalValue,
+                bestItem: gameState.stats.bestItem,
+                lastUpdated: new Date().toISOString()
+            };
+        }
+
+        function getLeaderboardData() {
+            if (!window.gameData || !window.gameData.leaderboardData) {
+                return [];
+            }
+            
+            return Object.values(window.gameData.leaderboardData);
+        }
+
+        function switchLeaderboardTab(tab) {
+            document.querySelectorAll('.leaderboard-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.leaderboard-content').forEach(c => c.classList.remove('active'));
+            
+            document.getElementById(`${tab}Tab`).classList.add('active');
+            document.getElementById(`${tab}Leaderboard`).classList.add('active');
+            
+            if (tab === 'richest') {
+                updateRichestLeaderboard();
+            } else if (tab === 'cases') {
+                updateCasesLeaderboard();
+            }
+        }
+
+        function updateRichestLeaderboard() {
+            const container = document.getElementById('richestList');
+            const data = getLeaderboardData();
+            
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-leaderboard">
+                        <h3>No players yet!</h3>
+                        <p>Be the first to make it to the leaderboard!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const sortedData = data.sort((a, b) => b.balance - a.balance).slice(0, 100);
+            
+            container.innerHTML = `
+                <button class="refresh-leaderboard" onclick="updateRichestLeaderboard()">🔄 Refresh Leaderboard</button>
+                ${sortedData.map((player, index) => {
+                    const rank = index + 1;
+                    const isCurrentUser = player.username === currentUser;
+                    let rankClass = '';
+                    if (rank === 1) rankClass = 'top1';
+                    else if (rank === 2) rankClass = 'top2';
+                    else if (rank === 3) rankClass = 'top3';
+                    
+                    const bestItemDisplay = player.bestItem ? `
+                        <div class="leaderboard-best-item ${player.bestItem.rarity}">
+                            <div class="leaderboard-item-icon">${player.bestItem.icon}</div>
+                            <div class="leaderboard-item-info">
+                                <div class="leaderboard-item-name">${player.bestItem.name}</div>
+                                <div class="leaderboard-item-value">${player.bestItem.value.toFixed(2)}</div>
+                            </div>
+                        </div>
+                    ` : '<div class="leaderboard-stat">🚫 No items yet</div>';
+                    
+                    return `
+                        <div class="leaderboard-item ${isCurrentUser ? 'current-user' : ''}">
+                            <div class="leaderboard-rank ${rankClass}">
+                                ${rank <= 3 ? (rank === 1 ? '🥇' : rank === 2 ? '🥈' : '🥉') : `#${rank}`}
+                            </div>
+                            <div class="leaderboard-user">
+                                <div class="leaderboard-username">
+                                    ${player.username}${isCurrentUser ? ' (You)' : ''}
+                                </div>
+                                <div class="leaderboard-stats">
+                                    <div class="leaderboard-stat">📦 ${player.casesOpened} cases</div>
+                                    <div class="leaderboard-stat">💎 ${player.totalValue.toFixed(2)} earned</div>
+                                    ${bestItemDisplay}
+                                </div>
+                            </div>
+                            <div class="leaderboard-main-stat">${player.balance.toFixed(2)}</div>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        function updateCasesLeaderboard() {
+            const container = document.getElementById('casesList');
+            const data = getLeaderboardData();
+            
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-leaderboard">
+                        <h3>No players yet!</h3>
+                        <p>Be the first to make it to the leaderboard!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const sortedData = data.sort((a, b) => b.casesOpened - a.casesOpened).slice(0, 100);
+            
+            container.innerHTML = `
+                <button class="refresh-leaderboard" onclick="updateCasesLeaderboard()">🔄 Refresh Leaderboard</button>
+                ${sortedData.map((player, index) => {
+                    const rank = index + 1;
+                    const isCurrentUser = player.username === currentUser;
+                    let rankClass = '';
+                    if (rank === 1) rankClass = 'top1';
+                    else if (rank === 2) rankClass = 'top2';
+                    else if (rank === 3) rankClass = 'top3';
+                    
+                    const bestItemDisplay = player.bestItem ? `
+                        <div class="leaderboard-best-item ${player.bestItem.rarity}">
+                            <div class="leaderboard-item-icon">${player.bestItem.icon}</div>
+                            <div class="leaderboard-item-info">
+                                <div class="leaderboard-item-name">${player.bestItem.name}</div>
+                                <div class="leaderboard-item-value">${player.bestItem.value.toFixed(2)}</div>
+                            </div>
+                        </div>
+                    ` : '<div class="leaderboard-stat">🚫 No items yet</div>';
+                    
+                    return `
+                        <div class="leaderboard-item ${isCurrentUser ? 'current-user' : ''}">
+                            <div class="leaderboard-rank ${rankClass}">
+                                ${rank <= 3 ? (rank === 1 ? '🥇' : rank === 2 ? '🥈' : '🥉') : `#${rank}`}
+                            </div>
+                            <div class="leaderboard-user">
+                                <div class="leaderboard-username">
+                                    ${player.username}${isCurrentUser ? ' (You)' : ''}
+                                </div>
+                                <div class="leaderboard-stats">
+                                    <div class="leaderboard-stat">💰 ${player.balance.toFixed(2)}</div>
+                                    <div class="leaderboard-stat">💎 ${player.totalValue.toFixed(2)} earned</div>
+                                    ${bestItemDisplay}
+                                </div>
+                            </div>
+                            <div class="leaderboard-main-stat">${player.casesOpened} cases</div>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        function saveAfterAction() {
+            setTimeout(() => {
+                autoSave();
+                updateLeaderboardStats();
+            }, 1000);
+        }
+
         // Utility Functions
         function showNotification(message, type = 'error', duration = 4000) {
             const container = document.getElementById('notifications');
@@ -989,6 +1898,10 @@
             
             if (sectionName === 'inventory') updateInventoryDisplay();
             if (sectionName === 'upgrade') updateUpgradeDisplay();
+            if (sectionName === 'leaderboard') {
+                updateLeaderboardStats();
+                switchLeaderboardTab('richest');
+            }
         }
 
         function initNavigation() {
@@ -1010,9 +1923,7 @@
             document.getElementById('selectedCaseName').textContent = caseInfo[caseType].name;
             document.getElementById('selectedCasePrice').textContent = price === 0 ? 'FREE' : `${price.toFixed(2)}`;
             
-            // Show preview items
             generatePreviewItems();
-            
             switchSection('unbox');
             showNotification(`Ready to open ${caseInfo[caseType].name}!`, 'success', 2000);
         }
@@ -1059,7 +1970,6 @@
             
             document.getElementById('resultSection').style.display = 'none';
             
-            // Create fresh roll items
             const container = document.getElementById('rollItems');
             container.innerHTML = '';
             container.style.transition = 'none';
@@ -1069,7 +1979,6 @@
             const winningIndex = 40 + Math.floor(Math.random() * 8);
             let winnerData = null;
             
-            // Generate items
             for (let i = 0; i < numItems; i++) {
                 const item = getRandomItem(gameState.currentCase);
                 const itemElement = document.createElement('div');
@@ -1088,7 +1997,6 @@
                 container.appendChild(itemElement);
             }
             
-            // Start animation after DOM update
             setTimeout(() => {
                 const winner = document.getElementById('winner-item');
                 
@@ -1127,8 +2035,8 @@
                     button.disabled = false;
                     button.textContent = 'UNBOX CASE';
                     
-                    // Clean up
                     winner.removeAttribute('id');
+                    saveAfterAction();
                 }, 4200);
             }, 300);
         }
@@ -1223,6 +2131,7 @@
             updateUI();
             updateInventoryDisplay();
             updateUpgradeDisplay();
+            saveAfterAction();
         }
 
         // Upgrade Functions
@@ -1302,7 +2211,6 @@
             const successRate = upgradeRates[gameState.selectedMultiplier];
             const isSuccess = Math.random() * 100 < successRate;
             
-            // Remove one copy of the item
             item.quantity--;
             if (item.quantity === 0) {
                 delete gameState.inventory[gameState.selectedUpgradeItem];
@@ -1324,6 +2232,10 @@
                 }
                 
                 showNotification(`SUCCESS! Upgraded to ${upgradedItem.name} worth ${upgradedItem.value.toFixed(2)}!`, 'success', 5000);
+                
+                if (!gameState.stats.bestItem || upgradedItem.value > gameState.stats.bestItem.value) {
+                    gameState.stats.bestItem = upgradedItem;
+                }
             } else {
                 showNotification(`FAILED! ${gameState.selectedUpgradeItem} was destroyed...`, 'error', 4000);
             }
@@ -1331,6 +2243,7 @@
             gameState.selectedUpgradeItem = null;
             updateUI();
             updateUpgradeDisplay();
+            saveAfterAction();
         }
 
         // Modal Functions
@@ -1378,7 +2291,6 @@
             document.getElementById('modal').classList.remove('active');
         }
 
-        // Close modal when clicking outside
         document.getElementById('modal').addEventListener('click', (e) => {
             if (e.target.id === 'modal') closeModal();
         });
@@ -1389,10 +2301,35 @@
             updateUI();
             generatePreviewItems();
             
+            if (currentUser && isAuthenticated) {
+                document.getElementById('authOverlay').style.display = 'none';
+            } else {
+                document.getElementById('authOverlay').style.display = 'flex';
+            }
+            
             setTimeout(() => {
-                showNotification('Welcome to Case Unboxer! Start with the free Basic Case.', 'info', 5000);
+                if (!isAuthenticated) {
+                    showNotification('Welcome! Create an account or login to save your progress.', 'info', 6000);
+                }
             }, 1000);
         }
+
+        // Auto-save every 30 seconds
+        setInterval(autoSave, 30000);
+
+        // Handle page unload - save data
+        window.addEventListener('beforeunload', () => {
+            if (isAuthenticated && currentUser) {
+                saveUserData();
+            }
+        });
+
+        // Handle page visibility change - save when tab becomes hidden
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isAuthenticated && currentUser) {
+                saveUserData();
+            }
+        });
 
         // Start the game when page loads
         document.addEventListener('DOMContentLoaded', init);
